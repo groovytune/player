@@ -100,7 +100,7 @@ export class AudioPlayer<I extends QueueItem = QueueItem> {
                     return;
                 } else if (this.repeat === 'all') {
                     if (this.previousable) {
-                        this.queue.previous(this.queue.history.length - 1);
+                        this.previous(this.queue.history.length - 1);
                         return;
                     } else if (this.current) {
                         this.setCurrentTime(0);
@@ -219,22 +219,26 @@ export class AudioPlayer<I extends QueueItem = QueueItem> {
         this.queue.unshuffle();
     }
 
-    public next(index: number = 0): void {
+    public async next(index: number = 0): Promise<void> {
         if (!this.nextable && this.current) {
             this.queue.setCurrentItem(null, 'history');
             return;
         }
 
         this.queue.next(index);
+            await this.queue.waitForAllListenersToComplete();
+            await this.audio?.play();
     }
 
-    public previous(index: number = 0): void {
+    public async previous(index: number = 0): Promise<void> {
         if (this.currentTime > 5 || !this.previousable) {
             this.setCurrentTime(0);
             return;
         }
 
         this.queue.previous(index);
+        await this.queue.waitForAllListenersToComplete();
+        await this.audio?.play();
     }
 
     public remove(item: I|string|number, from: 'queue'|'history' = 'queue'): I|null {
