@@ -12,11 +12,7 @@ export class AudioPlayer<I extends QueueItem = QueueItem> {
     public duration: number = $state(0);
     public currentTime: number = $state(0);
 
-    public progress: number = $derived(
-        this.audio && this.queue?.current
-            ? (this.currentTime / this.duration) * 100
-            : 0
-    );
+    public progress: number = $derived(this.duration ? (this.currentTime / this.duration) * 100 : 0);
 
     public current: I|null = $derived(this.queue?.current ?? null);
     public nextable: boolean = $derived(this.queue?.nextable ?? false);

@@ -51,7 +51,7 @@ export class Queue<I extends QueueItem = QueueItem> extends AsyncEventEmitter<Qu
     public clear(): void {
         this.items = [];
         this.history = [];
-        this.current = null;
+        this.setCurrentItem(null);
     }
 
     public shuffle(shuffler: (items: I[]) => I[] = Queue.shuffleArray): void {
