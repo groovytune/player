@@ -1,5 +1,5 @@
 <script lang="ts">
-    import type { BackgroundRender, MeshGradientRenderer } from '@applemusic-like-lyrics/core';
+    import type { BackgroundRender, MeshGradientRenderer, PixiRenderer } from '@applemusic-like-lyrics/core';
     import { onDestroy, onMount } from 'svelte';
     import type { HTMLAttributes } from 'svelte/elements';
 
@@ -19,7 +19,7 @@
         ...props
     }: {
         ref?: HTMLDivElement|null;
-        renderer?: BackgroundRender<MeshGradientRenderer>|null;
+        renderer?: BackgroundRender<MeshGradientRenderer|PixiRenderer>|null;
         renderType?: 'mesh'|'pixi';
         loaded?: boolean;
         image: string|HTMLImageElement;
