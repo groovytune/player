@@ -32,6 +32,10 @@
 	"peerDependencies": {
 		"svelte": "^5.0.0"
 	},
+	"optionalDependencies": {
+		"@applemusic-like-lyrics/core": "^0.5.1",
+		"@kawarp/core": "^1.2.0"
+	},
 	"devDependencies": {
 		"@faker-js/faker": "^10.5.0",
 		"@sveltejs/adapter-auto": "^7.0.1",
