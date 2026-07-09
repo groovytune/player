@@ -3,11 +3,11 @@ import type { QueueItem } from './QueueItem.ts';
 
 export class AudioPlayer<I extends QueueItem = QueueItem> {
     public audio: HTMLAudioElement|null = null;
-    public queue!: Queue<I>;
+    public queue: Queue<I> = new Queue<I>();
 
     public status: AudioPlayer.Status = $state('stopped');
     public repeat: AudioPlayer.RepeatMode = $state('none');
-    public paused: boolean = $state(false);
+    public paused: boolean = $state(true);
     public volume: number = $state(1);
     public duration: number = $state(0);
     public currentTime: number = $state(0);
@@ -21,20 +21,23 @@ export class AudioPlayer<I extends QueueItem = QueueItem> {
     public current: I|null = $derived(this.queue?.current ?? null);
     public nextable: boolean = $derived(this.queue?.nextable ?? false);
     public previousable: boolean = $derived(this.queue?.previousable ?? false);
+    public shuffled: boolean = $derived(this.queue?.shuffled ?? false);
 
     private frameId: number|null = null;
     private abortController: AbortController|null = null;
 
     public async init(options?: AudioPlayer.Options<I>): Promise<void> {
         this.audio = options?.audio ?? new Audio();
-        this.queue = options?.queue instanceof Queue ? options.queue : new Queue(options?.queue);
+        this.queue = options?.queue instanceof Queue
+            ? options.queue
+            : options?.queue
+                ? new Queue(options.queue)
+                : this.queue;
 
         this.audio.preload = 'metadata';
         this.audio.crossOrigin = 'anonymous';
 
         this.abortController = new AbortController();
-
-        document.body.appendChild(this.audio);
 
         this.on(
             ['seeked', 'seeking'],
@@ -132,7 +135,7 @@ export class AudioPlayer<I extends QueueItem = QueueItem> {
                     await this.audio.play();
                 }
             } else {
-                this.audio.removeAttribute('src');
+                this.audio.src = '';
             }
         });
 
@@ -170,6 +173,8 @@ export class AudioPlayer<I extends QueueItem = QueueItem> {
         if (!item) return;
 
         this.queue.setCurrentItem(item);
+
+        await this.queue.waitForAllListenersToComplete();
         await this.audio.play();
     }
 
@@ -182,7 +187,7 @@ export class AudioPlayer<I extends QueueItem = QueueItem> {
         if (this.audio) {
             this.audio.pause();
             this.audio.currentTime = 0;
-            this.audio.removeAttribute('src');
+            this.audio.src = '';
         }
 
         this.status = 'stopped';
@@ -218,21 +223,35 @@ export class AudioPlayer<I extends QueueItem = QueueItem> {
         this.queue.unshuffle();
     }
 
-    public next(index: number = 0, portal: boolean = true): void {
-        this.queue.next(index, portal);
+    public next(index: number = 0): void {
+        if (!this.nextable && this.current) {
+            this.queue.setCurrentItem(null, 'history');
+            return;
+        }
+
+        this.queue.next(index);
     }
 
-    public previous(index: number = 0, portal: boolean = true): void {
-        this.queue.previous(index, portal);
+    public previous(index: number = 0): void {
+        if (this.currentTime > 5 || !this.previousable) {
+            this.setCurrentTime(0);
+            return;
+        }
+
+        this.queue.previous(index);
+    }
+
+    public remove(item: I|string|number, from: 'queue'|'history' = 'queue'): I|null {
+        return this.queue.remove(item, from);
     }
 
     public async togglePlay(): Promise<void> {
         if (!this.audio) return;
 
         if (this.audio.paused) {
-            await this.audio.play();
+            await this.play();
         } else {
-            this.audio.pause();
+            this.pause();
         }
     }
 

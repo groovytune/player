@@ -70,9 +70,9 @@ export class Queue<I extends QueueItem = QueueItem> extends AsyncEventEmitter<Qu
         this.emit('shuffleToggle', this.shuffled);
     }
 
-    public next(index: number = 0, portal: boolean = true): void {
-        if (index < 0 || index >= this.items.length && (index !== 0 || !portal)) {
-            throw new Error(`Index ${index} is out of bounds for queue of length ${this.items.length}`);
+    public next(index: number = 0): void {
+        if (index < 0 || index >= this.items.length) {
+            return;
         }
 
         const history = this.items.splice(0, index);
@@ -88,14 +88,11 @@ export class Queue<I extends QueueItem = QueueItem> extends AsyncEventEmitter<Qu
             this.emit('next', nextItem);
             return;
         }
-
-        this.setCurrentItem(this.history.pop() ?? null);
-        this.emit('next', this.current);
     }
 
-    public previous(index: number = 0, portal: boolean = true): void {
-        if (index < 0 || index >= this.history.length && (index !== 0 || !portal)) {
-            throw new Error(`Index ${index} is out of bounds for history of length ${this.history.length}`);
+    public previous(index: number = 0): void {
+        if (index < 0 || index >= this.history.length) {
+            return;
         }
 
         const addToQueue = this.history.splice(0, index);
@@ -111,9 +108,6 @@ export class Queue<I extends QueueItem = QueueItem> extends AsyncEventEmitter<Qu
             this.emit('previous', previousItem);
             return;
         }
-
-        this.setCurrentItem(this.items.pop() ?? null);
-        this.emit('previous', this.current);
     }
 
     public setCurrentItem(item: I|null, moveOldTo: 'queue'|'history'|null = null): void {
