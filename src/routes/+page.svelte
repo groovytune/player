@@ -97,7 +97,7 @@
 <div>
     <h3>Items</h3>
     <ol>
-        {#each player.queue.items as item (item.id)}
+        {#each player.queue.items as item, index (item.id)}
             <li animate:flip={{ duration: 300 }}>
                 <a
                     href="/#"
@@ -107,6 +107,15 @@
                     }}
                 >
                     remove
+                </a>
+                <a
+                    href="/#"
+                    onclick={event => {
+                        event.preventDefault();
+                        player.next(index)
+                    }}
+                >
+                    Play
                 </a>
                 {item.name} by {item.artist}
             </li>
@@ -119,7 +128,7 @@
 <div>
     <h3>History</h3>
     <ol>
-        {#each player.queue.history.toReversed() as item (item.id)}
+        {#each player.queue.history as item, index (item.id)}
             <li animate:flip={{ duration: 300 }}>
                 <a
                     href="/#"
@@ -129,6 +138,15 @@
                     }}
                 >
                     remove
+                </a>
+                <a
+                    href="/#"
+                    onclick={event => {
+                        event.preventDefault();
+                        player.previous(index)
+                    }}
+                >
+                    Play
                 </a>
                 {item.name} by {item.artist}
             </li>
