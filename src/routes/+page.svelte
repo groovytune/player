@@ -61,7 +61,7 @@
         Previous
     </button>
     <button
-        onclick={() => queue.next()}
+        onclick={() => queue.next(0, false)}
     >
         Next
     </button>
