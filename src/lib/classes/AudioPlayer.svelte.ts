@@ -11,8 +11,10 @@ export class AudioPlayer<I extends QueueItem = QueueItem> {
     public volume: number = $state(1);
     public duration: number = $state(0);
     public currentTime: number = $state(0);
+    public buffered: TimeRanges|null = $state(null);
 
     public progress: number = $derived(this.duration ? (this.currentTime / this.duration) * 100 : 0);
+    public bufferedProgress: number = $derived(this.duration && this.buffered ? (this.buffered.end(this.buffered.length - 1) / this.duration) * 100 : 0);
 
     public current: I|null = $derived(this.queue?.current ?? null);
     public nextable: boolean = $derived(this.queue?.nextable ?? false);
@@ -114,6 +116,12 @@ export class AudioPlayer<I extends QueueItem = QueueItem> {
             },
             { passive: true }
         );
+
+        this.on('progress', () => {
+            if (!this.audio) return;
+
+            this.buffered = this.audio.buffered;
+        });
 
         this.queue.on('currentChange', async item => {
             if (!this.audio) return;
