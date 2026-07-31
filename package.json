@@ -30,27 +30,27 @@
 		}
 	},
 	"peerDependencies": {
-		"svelte": "^5.0.0"
+		"svelte": "^5.56.8"
 	},
 	"optionalDependencies": {
-		"@applemusic-like-lyrics/core": "^0.5.1",
+		"@applemusic-like-lyrics/core": "^0.5.2",
 		"@kawarp/core": "^1.2.0"
 	},
 	"devDependencies": {
 		"@faker-js/faker": "^10.5.0",
-		"@lucide/svelte": "^1.24.0",
+		"@lucide/svelte": "^1.28.0",
 		"@sveltejs/adapter-auto": "^7.0.1",
-		"@sveltejs/kit": "^2.63.0",
+		"@sveltejs/kit": "^2.70.2",
 		"@sveltejs/package": "^2.5.8",
-		"@sveltejs/vite-plugin-svelte": "^7.1.2",
-		"@tailwindcss/vite": "^4.3.0",
-		"music-metadata": "^11.13.0",
-		"publint": "^0.3.21",
-		"svelte": "^5.56.1",
-		"svelte-check": "^4.6.0",
-		"tailwindcss": "^4.3.0",
-		"typescript": "^6.0.3",
-		"vite": "^8.0.16"
+		"@sveltejs/vite-plugin-svelte": "^7.2.0",
+		"@tailwindcss/vite": "^4.3.3",
+		"music-metadata": "^11.14.0",
+		"publint": "^0.3.22",
+		"svelte": "^5.56.8",
+		"svelte-check": "^4.7.4",
+		"tailwindcss": "^4.3.3",
+		"typescript": "^7.0.2",
+		"vite": "^8.2.0"
 	},
 	"keywords": [
 		"svelte"
