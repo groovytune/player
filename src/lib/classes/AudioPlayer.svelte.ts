@@ -266,10 +266,10 @@ export class AudioPlayer<I extends QueueItem = QueueItem> {
     public toggleRepeatMode(): void {
         switch (this.repeat) {
             case 'none':
-                this.repeat = 'all';
+                this.repeat = 'one';
                 break;
             case 'one':
-                this.repeat = 'one';
+                this.repeat = 'all';
                 break;
             case 'all':
                 this.repeat = 'none';
