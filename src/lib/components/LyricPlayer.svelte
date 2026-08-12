@@ -1,4 +1,5 @@
 <script lang="ts">
+    import '@applemusic-like-lyrics/core/style.css';
     import type { HTMLAttributes } from 'svelte/elements';
     import type { LyricPlayer as AMLLLyricsPlayer, LayoutAlignAnchor, LyricLine, LyricLineMouseEventListener, MaskObsceneWordsMode, OptimizeLyricOptions, spring } from '@applemusic-like-lyrics/core';
     import { onDestroy, onMount, untrack } from 'svelte';
